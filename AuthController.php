@@ -9,34 +9,33 @@ class AuthController {
         $this->api = new ApiModel();
     }
 
-    public function login() {
+public function login() {
 
-        session_start();
-        $mensagem = "";
+    $mensagem = "";
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            $email = $_POST["email"] ?? "";
-            $senha = $_POST["senha"] ?? "";
+        $email = $_POST["email"] ?? "";
+        $senha = $_POST["senha"] ?? "";
 
-            if (empty($email) || empty($senha)) {
-                $mensagem = "Preencha todos os campos!";
+        if (empty($email) || empty($senha)) {
+            $mensagem = "Preencha todos os campos!";
+        } else {
+
+            $resultado = $this->api->login($email, $senha);
+
+            if (isset($resultado["token"])) {
+                $_SESSION["token"] = $resultado["token"];
+                header("Location: index.php?page=dashboard");
+                exit();
             } else {
-
-                $resultado = $this->api->login($email, $senha);
-
-                if (isset($resultado["token"])) {
-                    $_SESSION["token"] = $resultado["token"];
-                    header("Location: index.php?page=dashboard");
-                    exit();
-                } else {
-                    $mensagem = $resultado["mensagem"] ?? "Erro ao fazer login";
-                }
+                $mensagem = $resultado["mensagem"] ?? "Erro ao fazer login";
             }
         }
-
-        require "views/login.php";
     }
+
+    require "views/login.php";
+}
 
 public function dashboard() {
 
