@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json'
         ]);
-        curl_setotp($ch, CURLOPT_POSTFIELDS, json_encode($dados));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dados));
 
         $response = curl_exec($ch);
         curl_close($ch);
@@ -57,18 +57,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <h2>Login</h2>
 
 <form method="POST">
-    <label>Email:</label><br>
-    <input type="email" name="email"><br><br>
-
-    <label>Senha:</label><br>
-    <input type="password" name="senha"><br><br>
-
+    <input type="email" name="email" placeholder="Email"><br><br>
+    <input type="password" name="senha" placeholder="Senha"><br><br>
     <button type="submit">Entrar</button>
 </form>
 
 <p style="color:red;">
-    <?php echo $mensagem; ?>
+    <?php echo $mensagem ?? ""; ?>
 </p>
+
+<a href="index.php?page=cadastro">Criar conta</a>
 
 </body>
 </html>
