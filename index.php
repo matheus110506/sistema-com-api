@@ -10,6 +10,10 @@ $page = $_GET["page"] ?? "login";
 
 switch ($page) {
 
+    case "cadastro":
+    (new AuthController())->cadastro();
+    break;
+
     case "login":
         (new AuthController())->login();
         break;
