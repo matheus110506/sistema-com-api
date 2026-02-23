@@ -49,8 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Login</title>
+<head>
+    <title>Login</title>
 </head>
 <body>
 
@@ -65,8 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <p style="color:red;">
     <?php echo $mensagem ?? ""; ?>
 </p>
-
-<a href="index.php?page=cadastro">Criar conta</a>
 
 </body>
 </html>
