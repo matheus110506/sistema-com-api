@@ -3,6 +3,7 @@ session_start();
 
 require_once "controllers/AuthController.php";
 require_once "controllers/MaeController.php";
+require_once "controllers/FilhoController.php";
 
 $page = $_GET["page"] ?? "login";
 
@@ -67,3 +68,4 @@ switch ($page) {
     default:
         (new AuthController())->login();
 }
+
