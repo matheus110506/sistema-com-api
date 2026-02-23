@@ -9,6 +9,33 @@ class AuthController {
         $this->api = new ApiModel();
     }
 
+    public function cadastro() {
+
+    $mensagem = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+        $email = $_POST["email"] ?? "";
+        $senha = $_POST["senha"] ?? "";
+
+        if (empty($email) || empty($senha)) {
+            $mensagem = "Preencha todos os campos!";
+        } else {
+
+            $resultado = $this->api->cadastro($email, $senha);
+
+            if (isset($resultado["mensagem"])) {
+                $mensagem = $resultado["mensagem"];
+            }
+
+            header("Location: index.php?page=login");
+            exit();
+        }
+    }
+
+    require "views/cadastro.php";
+}
+
     public function login() {
 
         $mensagem = "";
