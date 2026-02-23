@@ -4,39 +4,52 @@ class ApiModel {
 
     private $baseUrl = "http://localhost:3000";
 
-    public function login($email, $senha) {
+    private function request($endpoint, $method = "GET", $data = null, $token = null) {
 
-        $dados = [
-            "email" => $email,
-            "senha" => $senha
-        ];
-
-        $ch = curl_init($this->baseUrl . "/login");
-
+        $ch = curl_init($this->baseUrl . $endpoint);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json'
-        ]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dados));
+
+        $headers = ['Content-Type: application/json'];
+
+        if ($token) {
+            $headers[] = "Authorization: Bearer $token";
+        }
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        if ($method === "POST") {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        }
+
+        if ($method === "PUT") {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        }
+
+        if ($method === "DELETE") {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        }
 
         $response = curl_exec($ch);
         curl_close($ch);
 
         return json_decode($response, true);
     }
+
     public function listarMaes($token) {
+        return $this->request("/maes", "GET", null, $token);
+    }
 
-    $ch = curl_init($this->baseUrl . "/maes");
+    public function criarMae($dados, $token) {
+        return $this->request("/maes", "POST", $dados, $token);
+    }
 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: Bearer $token"
-    ]);
+    public function atualizarMae($id, $dados, $token) {
+        return $this->request("/maes/$id", "PUT", $dados, $token);
+    }
 
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    return json_decode($response, true);
-}
+    public function excluirMae($id, $token) {
+        return $this->request("/maes/$id", "DELETE", null, $token);
+    }
 }
