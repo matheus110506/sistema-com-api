@@ -40,6 +40,30 @@ switch ($page) {
         (new MaeController())->delete();
         break;
 
+        case "filhos":
+    (new FilhoController())->index();
+    break;
+
+    case "filho_create":
+    (new FilhoController())->create();
+    break;
+
+    case "filho_store":
+    (new FilhoController())->store();
+    break;
+
+    case "filho_edit":
+    (new FilhoController())->edit();
+    break;
+
+    case "filho_update":
+    (new FilhoController())->update();
+    break;
+
+    case "filho_delete":
+    (new FilhoController())->delete();
+    break;
+
     default:
         (new AuthController())->login();
 }
