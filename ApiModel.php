@@ -25,4 +25,18 @@ class ApiModel {
 
         return json_decode($response, true);
     }
+    public function listarMaes($token) {
+
+    $ch = curl_init($this->baseUrl . "/maes");
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: Bearer $token"
+    ]);
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    return json_decode($response, true);
+}
 }
