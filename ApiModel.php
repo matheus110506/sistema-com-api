@@ -68,4 +68,20 @@ class ApiModel {
     public function excluirFilho($id, $token) {
     return $this->request("/filhos/$id", "DELETE", null, $token);
     }
+
+    public function listarTarefas($filhoId, $token) {
+    return $this->request("/filhos/$filhoId/tarefas", "GET", null, $token);
+    }
+
+    public function criarTarefa($filhoId, $dados, $token) {
+    return $this->request("/filhos/$filhoId/tarefas", "POST", $dados, $token);
+    }
+
+    public function atualizarTarefa($id, $dados, $token) {
+    return $this->request("/tarefas/$id", "PUT", $dados, $token);
+    }
+
+    public function excluirTarefa($id, $token) {
+    return $this->request("/tarefas/$id", "DELETE", null, $token);
+    }
 }
