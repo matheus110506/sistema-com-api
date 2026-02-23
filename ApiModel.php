@@ -37,6 +37,15 @@ class ApiModel {
         return json_decode($response, true);
     }
 
+    public function login($email, $senha) {
+        $dados = [
+            "email" => $email,
+            "senha" => $senha
+        ];
+
+        return $this->request("/login", "POST", $dados);
+    }
+    
     public function listarMaes($token) {
         return $this->request("/maes", "GET", null, $token);
     }
