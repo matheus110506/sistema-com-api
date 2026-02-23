@@ -9,52 +9,49 @@ class AuthController {
         $this->api = new ApiModel();
     }
 
-public function login() {
+    public function login() {
 
-    $mensagem = "";
+        $mensagem = "";
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $email = $_POST["email"] ?? "";
-        $senha = $_POST["senha"] ?? "";
+            $email = $_POST["email"] ?? "";
+            $senha = $_POST["senha"] ?? "";
 
-        if (empty($email) || empty($senha)) {
-            $mensagem = "Preencha todos os campos!";
-        } else {
-
-            $resultado = $this->api->login($email, $senha);
-
-            if (isset($resultado["token"])) {
-                $_SESSION["token"] = $resultado["token"];
-                header("Location: index.php?page=dashboard");
-                exit();
+            if (empty($email) || empty($senha)) {
+                $mensagem = "Preencha todos os campos!";
             } else {
-                $mensagem = $resultado["mensagem"] ?? "Erro ao fazer login";
+
+                $resultado = $this->api->login($email, $senha);
+
+                if (isset($resultado["token"])) {
+                    $_SESSION["token"] = $resultado["token"];
+                    header("Location: index.php?page=dashboard");
+                    exit();
+                } else {
+                    $mensagem = $resultado["mensagem"] ?? "Erro ao fazer login";
+                }
             }
         }
+
+        require "views/login.php";
     }
 
-    require "views/login.php";
-}
+    public function dashboard() {
 
-public function dashboard() {
+        if (!isset($_SESSION["token"])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
 
-    session_start();
+        $token = $_SESSION["token"];
 
-    if (!isset($_SESSION["token"])) {
-        header("Location: index.php?page=login");
-        exit();
+        $maes = $this->api->listarMaes($token);
+
+        require "views/dashboard.php";
     }
-
-    $token = $_SESSION["token"];
-
-    $maes = $this->api->listarMaes($token);
-
-    require "views/dashboard.php";
-}
 
     public function logout() {
-        session_start();
         session_destroy();
         header("Location: index.php?page=login");
         exit();
