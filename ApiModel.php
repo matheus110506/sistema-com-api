@@ -52,4 +52,20 @@ class ApiModel {
     public function excluirMae($id, $token) {
         return $this->request("/maes/$id", "DELETE", null, $token);
     }
+
+    public function listarFilhos($maeId, $token) {
+    return $this->request("/maes/$maeId/filhos", "GET", null, $token);
+    }
+
+    public function criarFilho($maeId, $dados, $token) {
+    return $this->request("/maes/$maeId/filhos", "POST", $dados, $token);
+    }
+
+    public function atualizarFilho($id, $dados, $token) {
+    return $this->request("/filhos/$id", "PUT", $dados, $token);
+    }
+
+    public function excluirFilho($id, $token) {
+    return $this->request("/filhos/$id", "DELETE", null, $token);
+    }
 }
