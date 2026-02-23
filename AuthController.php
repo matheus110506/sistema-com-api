@@ -38,17 +38,21 @@ class AuthController {
         require "views/login.php";
     }
 
-    public function dashboard() {
+public function dashboard() {
 
-        session_start();
+    session_start();
 
-        if (!isset($_SESSION["token"])) {
-            header("Location: index.php?page=login");
-            exit();
-        }
-
-        require "views/dashboard.php";
+    if (!isset($_SESSION["token"])) {
+        header("Location: index.php?page=login");
+        exit();
     }
+
+    $token = $_SESSION["token"];
+
+    $maes = $this->api->listarMaes($token);
+
+    require "views/dashboard.php";
+}
 
     public function logout() {
         session_start();
