@@ -17,5 +17,7 @@
     <?php echo $mensagem ?? ""; ?>
 </p>
 
+<a href="index.php?page=cadastro">Não possui uma conta? Fazer cadastro</a>
+
 </body>
 </html>
