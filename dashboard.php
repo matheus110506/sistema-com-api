@@ -1,26 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION["token"])) {
-    header("Loaction: login.php");
-    exit();
-}
-
-$token = $_SESSION["token"];
-
-$ch = curl_init("http://localhost:3000/maes");
-
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Authorization: Bearer $token"
-]);
-
-$response = curl_exec($ch);
-curl_close($ch);
-
-$maes = json_decode($response, true);
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +7,7 @@ $maes = json_decode($response, true);
 
 <h2>Dashboard</h2>
 
-<a href="logout.php">Sair</a>
+<a href="index.php?page=logout">Sair</a>
 
 <h3>Minhas Mães</h3>
 
