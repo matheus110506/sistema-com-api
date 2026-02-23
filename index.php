@@ -4,6 +4,7 @@ session_start();
 require_once "controllers/AuthController.php";
 require_once "controllers/MaeController.php";
 require_once "controllers/FilhoController.php";
+require_once "controllers/TarefaController.php";
 
 $page = $_GET["page"] ?? "login";
 
@@ -65,7 +66,26 @@ switch ($page) {
     (new FilhoController())->delete();
     break;
 
+    case "tarefas":
+    (new TarefaController())->index();
+    break;
+
+    case "tarefa_create":
+    (new TarefaController())->create();
+    break;
+
+    case "tarefa_store":
+    (new TarefaController())->store();
+    break;
+
+    case "tarefa_update":
+    (new TarefaController())->update();
+    break;
+
+    case "tarefa_delete":
+    (new TarefaController())->delete();
+    break;
+
     default:
         (new AuthController())->login();
 }
-
