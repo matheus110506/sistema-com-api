@@ -4,47 +4,49 @@ class ApiModel {
 
     private $baseUrl = "http://localhost:3000";
 
-    private function request($endpoint, $method = "GET", $data = null, $token = null) {
+private function request($endpoint, $method = "GET", $data = null, $token = null) {
 
-        $ch = curl_init($this->baseUrl . $endpoint);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $url = $this->baseUrl . $endpoint;
 
-        $headers = ['Content-Type: application/json'];
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        if ($token) {
-            $headers[] = "Authorization: Bearer $token";
-        }
+    $headers = ['Content-Type: application/json'];
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        if ($method === "POST") {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        }
-
-        if ($method === "PUT") {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        }
-
-        if ($method === "DELETE") {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        }
-
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return json_decode($response, true);
+    if ($token) {
+        $headers[] = "Authorization: Bearer $token";
     }
 
-    public function cadastro($email, $senha) {
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-    $dados = [
-        "email" => $email,
-        "senha" => $senha
-    ];
+    if ($method === "POST") {
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    }
 
-    return $this->request("/cadastro", "POST", $dados);
+    $response = curl_exec($ch);
+
+    if ($response === false) {
+        echo "Erro cURL: " . curl_error($ch);
+        exit();
+    }
+
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    curl_close($ch);
+
+    return json_decode($response, true);
+}
+
+    public function cadastro($nome, $email, $senha) {
+
+        $dados = [
+            "nome" => $nome,
+            "email" => $email,
+            "senha" => $senha
+        ];
+
+        return $this->request("/usuarios", "POST", $dados);
     }
 
     public function login($email, $senha) {
