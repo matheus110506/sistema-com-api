@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once "models/ApiModel.php";
 
 class AuthController {
