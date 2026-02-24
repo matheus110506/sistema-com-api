@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once "models/ApiModel.php";
 
 class AuthController {
@@ -11,30 +13,34 @@ class AuthController {
 
     public function cadastro() {
 
-    $mensagem = "";
+        $mensagem = "";
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $email = $_POST["email"] ?? "";
-        $senha = $_POST["senha"] ?? "";
+            $nome = $_POST["nome"] ?? "";
+            $email = $_POST["email"] ?? "";
+            $senha = $_POST["senha"] ?? "";
 
-        if (empty($email) || empty($senha)) {
-            $mensagem = "Preencha todos os campos!";
-        } else {
+            if (empty($nome) || empty($email) || empty($senha)) {
+                $mensagem = "Preencha todos os campos!";
+            } else {
 
-            $resultado = $this->api->cadastro($email, $senha);
+                $resultado = $this->api->cadastro($nome, $email, $senha);
 
-            if (isset($resultado["mensagem"])) {
-                $mensagem = $resultado["mensagem"];
+                if (
+                    isset($resultado["mensagem"]) &&
+                    $resultado["mensagem"] === "Usuário cadastrado com sucesso"
+                ) {
+                    header("Location: index.php?page=login");
+                    exit();
+                } else {
+                    $mensagem = $resultado["mensagem"] ?? "Erro no cadastro";
+                }
             }
-
-            header("Location: index.php?page=login");
-            exit();
         }
-    }
 
-    require "views/cadastro.php";
-}
+        require "views/cadastro.php";
+    }
 
     public function login() {
 
@@ -52,9 +58,12 @@ class AuthController {
                 $resultado = $this->api->login($email, $senha);
 
                 if (isset($resultado["token"])) {
+
                     $_SESSION["token"] = $resultado["token"];
+
                     header("Location: index.php?page=dashboard");
                     exit();
+
                 } else {
                     $mensagem = $resultado["mensagem"] ?? "Erro ao fazer login";
                 }
