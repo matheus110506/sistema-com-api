@@ -14,7 +14,7 @@ exports.cadastrarUsuario = async (req, res) => {
         connection.query(
             "SELECT id FROM usuarios WHERE email = ?",
             [email],
-            async (error, results) => {
+            async (err, results) => {
                 if (err) {
                     return res.status(500).json({ erro: err });
                 }
